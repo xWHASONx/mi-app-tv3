@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reconocimiento de la Quincena</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --color-fuego-1: #ff7b00;
+            --color-fuego-2: #ffb700;
+            --color-fondo: #121212;
+            --color-tarjeta: #2c2c2c;
+            --color-texto: #ffffff;
+            --fuente-titulos: 'Bebas Neue', sans-serif;
+            --fuente-cuerpo: 'Poppins', sans-serif;
+        }
+
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--fuente-cuerpo);
+            background-color: var(--color-fondo);
+            color: var(--color-texto);
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; padding: 2rem;
+            background-image: 
+                radial-gradient(circle at 15% 85%, rgba(255, 123, 0, 0.15), transparent 40%),
+                radial-gradient(circle at 85% 25%, rgba(255, 183, 0, 0.15), transparent 40%);
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative; z-index: 10;
+            width: 100%; max-width: 1000px; text-align: center;
+        }
+
+        .titulo-principal {
+            font-family: var(--fuente-titulos);
+            font-size: 6rem; letter-spacing: 5px; margin-bottom: 3rem;
+            text-shadow: 0 0 10px #fff, 0 0 20px var(--color-fuego-1), 0 0 30px var(--color-fuego-1), 0 0 40px var(--color-fuego-1);
+            animation: flicker 1.5s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0%, 100% { text-shadow: 0 0 10px #fff, 0 0 20px var(--color-fuego-1), 0 0 30px var(--color-fuego-1), 0 0 40px var(--color-fuego-1); }
+            50% { text-shadow: 0 0 10px #fff, 0 0 25px var(--color-fuego-2), 0 0 35px var(--color-fuego-2), 0 0 45px var(--color-fuego-2); }
+        }
+
+        .ganadores-grid {
+            display: flex; justify-content: center; align-items: center;
+            gap: 2.5rem; flex-wrap: wrap;
+        }
+        
+        .tarjeta-ganador {
+            background-color: var(--color-tarjeta);
+            border-radius: 15px;
+            padding: 2.5rem;
+            width: 360px;
+            text-align: center;
+            opacity: 0;
+            position: relative;
+            
+            animation: 
+                fadeInUp 0.8s ease-out forwards,
+                subtleFloat 6s ease-in-out infinite,
+                softGlowPulse 2.5s ease-in-out infinite;
+        }
+        
+        .tarjeta-ganador:nth-child(1) { animation-delay: 0.5s, 0s, 0s; }
+        .tarjeta-ganador:nth-child(2) { animation-delay: 0.7s, -3s, -1.2s; }
+
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+        @keyframes subtleFloat {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* ========= ESTA ES LA TÉCNICA CORRECTA: ILUMINACIÓN DE BORDE SUAVE ========= */
+        @keyframes softGlowPulse {
+            0%, 100% {
+                box-shadow: 0 0 12px 3px rgba(255, 123, 0, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 20px 5px rgba(255, 183, 0, 0.7);
+            }
+        }
+        
+        .foto-ganador {
+            width: 160px; height: 160px;
+            border-radius: 50%; object-fit: cover;
+            margin: 0 auto 1.5rem auto;
+
+            /* Aplicamos la misma animación de brillo a la foto */
+            animation: softGlowPulsePhoto 2.5s ease-in-out infinite;
+            animation-delay: inherit;
+        }
+
+        @keyframes softGlowPulsePhoto {
+            0%, 100% {
+                box-shadow: 0 0 8px 2px rgba(255, 123, 0, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 12px 3px rgba(255, 183, 0, 0.7);
+            }
+        }
+        
+        .categoria-ganador {
+            font-size: 1.2rem; font-weight: bold;
+            color: var(--color-fuego-2); margin-bottom: 0.25rem;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .nombre-ganador {
+            font-size: 2.5rem; font-weight: bold;
+            color: var(--color-texto); margin-bottom: 1rem;
+        }
+        .monto-venta {
+            font-size: 2rem; font-weight: 700;
+            color: var(--color-fuego-2);
+        }
+        
+        .money-particle {
+            position: fixed; z-index: 1; top: -10vh; font-size: 1.5rem;
+            pointer-events: none; opacity: 0.7; animation: fall linear forwards;
+        }
+        @keyframes fall { to { transform: translateY(120vh) rotate(720deg); opacity: 0; } }
+
+        @media (max-width: 800px) {
+            .ganadores-grid { flex-direction: column; }
+            .titulo-principal { font-size: 4rem; }
+            .tarjeta-ganador { width: 90%; max-width: 360px; animation: none; opacity: 1;}
+            .tarjeta-ganador {
+                 box-shadow: 0 0 12px 3px rgba(255, 123, 0, 0.7);
+            }
+            .foto-ganador {
+                animation: none;
+                box-shadow: 0 0 8px 2px rgba(255, 123, 0, 0.7);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="titulo-principal">Los Mejores de la Quincena</h1>
+        <div class="ganadores-grid">
+            <div class="tarjeta-ganador">
+                <img src="https://i.imgur.com/K9LKNVS.jpeg" alt="Foto de Nicol, Mejor Asesora" class="foto-ganador">
+                <p class="categoria-ganador">Mejor Asesora</p>
+                <h2 class="nombre-ganador">Nicol</h2>
+                <p class="monto-venta">$29,800,000</p>
+            </div>
+            <div class="tarjeta-ganador">
+                <img src="https://i.imgur.com/v3RRTSs.jpeg" alt="Foto de Fernanda, Mejor OPC" class="foto-ganador">
+                <p class="categoria-ganador">Mejor OPC</p>
+                <h2 class="nombre-ganador">Fernanda</h2>
+                <p class="monto-venta">$20,932,746</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const createMoneyParticle = () => {
+                const particle = document.createElement('span');
+                particle.classList.add('money-particle');
+                particle.innerHTML = '💵';
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.animationDuration = `${Math.random() * 3 + 5}s`;
+                document.body.appendChild(particle);
+                particle.addEventListener('animationend', () => particle.remove());
+            };
+            const startMoneyRain = () => {
+                let particleCount = 40;
+                for(let i = 0; i < particleCount; i++) {
+                    setTimeout(createMoneyParticle, i * 50);
+                }
+            };
+            setTimeout(startMoneyRain, 2000);
+            setInterval(startMoneyRain, 5000);
+        });
+    </script>
+</body>
+</html>
